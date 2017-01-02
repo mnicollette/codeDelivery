@@ -27,13 +27,10 @@ class CheckRole
             return redirect('/auth/login');
         }
 
-        switch ($role) {
-            case 'client':
-                return redirect('/home');
-                break;
-            case 'admin':
-                return redirect('/admin/categories');
-                break;
+        if(Auth::user()->role <> $role) {
+            return redirect('/auth/login');
         }
+
+        return $next($request);
     }
 }

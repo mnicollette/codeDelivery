@@ -16,12 +16,10 @@ Route::get('/', function () {
 });
 
 
-Route::auth();
-
 Route::group(['middleware' => 'web'], function(){
     Route::auth();
 
-    Route::group(['prefix'=>'admin', 'middleware' => 'auth', 'as'=>'admin.'], function(){
+    Route::group(['prefix'=>'admin', 'middleware' => 'auth.checkrole:admin', 'as'=>'admin.'], function(){
 
         Route::get('categories', ['as' => 'categories.index', 'uses'=>'CategoriesController@index', 'role' => 'admin_system']);
         Route::get('categories/create', ['as' => 'categories.create', 'uses'=>'CategoriesController@create', 'role' => 'admin_system']);
@@ -49,8 +47,6 @@ Route::group(['middleware' => 'web'], function(){
         Route::post('orders/store', ['as' => 'orders.store', 'uses'=>'OrdersController@store', 'role' => 'admin_system']);
         Route::get('orders/destroy/{id}', ['as' => 'orders.destroy', 'uses'=>'OrdersController@destroy', 'role' => 'admin_system']);
 
-        Route::get('orders/list', ['as' => 'orders.list', 'uses'=>'OrdersController@list', 'role' => 'deliveryman_system']);
-
         Route::get('cupoms', ['as' => 'cupoms.index', 'uses'=>'CupomsController@index', 'role' => 'admin_system']);
         Route::get('cupoms/create', ['as' => 'cupoms.create', 'uses'=>'CupomsController@create', 'role' => 'admin_system']);
         Route::get('cupoms/edit/{id}', ['as' => 'cupoms.edit', 'uses'=>'CupomsController@edit', 'role' => 'admin_system']);
@@ -60,13 +56,35 @@ Route::group(['middleware' => 'web'], function(){
     });
 
 
-    Route::group(['prefix'=>'customer', 'middleware' =>'auth', 'as'=>'customer.'], function(){
+    Route::group(['prefix'=>'customer', 'middleware' =>'auth.checkrole:client', 'as'=>'customer.'], function(){
         Route::get('order', ['as' => 'order.index', 'uses'=>'CheckoutController@index', 'role' => 'user_system']);
         Route::get('order/create', ['as' => 'order.create', 'uses'=>'CheckoutController@create', 'role' => 'user_system']);
         Route::post('order/store', ['as' => 'order.store', 'uses'=>'CheckoutController@store', 'role' => 'user_system']);
     });
 
+    Route::group(['prefix'=>'user', 'middleware' =>'auth.checkrole:deliveryman', 'as'=>'user.'], function() {
+        Route::get('orders/list', ['as' => 'orders.list', 'uses' => 'OrdersController@list', 'role' => 'deliveryman_system']);
+    });
+
 });
 
 
+Route::post('oauth/access_token', function() {
+    return Response::json(Authorizer::issueAccessToken());
+});
 
+
+Route::group(['prefix'=>'api', 'middleware' =>'oauth', 'as'=>'api.'], function() {
+
+    Route::group(['prefix'=>'client', 'middleware' =>'oauth.checkrole:client', 'as'=>'client.'], function() {
+
+        Route::resource('order','Api\Client\ClientCheckoutController', ['except' => ['create', 'edit', 'destroy']]);
+
+    });
+
+    Route::group(['prefix'=>'deliveryman', 'middleware' =>'oauth.checkrole:deliveryman', 'as'=>'deliveryman.'], function() {
+        Route::resource('order','Api\Deliveryman\DeliverymanCheckoutController', ['except' => ['create', 'edit', 'destroy']]);
+
+        Route::patch('order/{id}/update-status',['uses'=>'Api\Deliveryman\DeliverymanCheckoutController@updateStatus','as'=>'orders.update_status']);
+    });
+});

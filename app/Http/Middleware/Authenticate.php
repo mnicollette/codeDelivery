@@ -33,12 +33,6 @@ class Authenticate
         }
 
 
-        //dd(Gate::denies('auth'));
-
-        if(Gate::denies('auth'))
-            abort('403');
-
-
         return $next($request);
     }
 }

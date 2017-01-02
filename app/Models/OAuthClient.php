@@ -1,0 +1,21 @@
+<?php
+
+namespace CodeDelivery\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
+
+class OAuthClient extends Model implements Transformable
+{
+    protected $table = 'oauth_clients';
+
+    use TransformableTrait;
+
+    protected $fillable = [
+        'id',
+        'secret',
+        'name'
+    ];
+
+}
