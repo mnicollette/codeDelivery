@@ -16,9 +16,9 @@ class OAuthClientsTableSeeder extends Seeder
         //Add sample users
         $oAuthClients = array(
             array(
-                'id' => 'TEST_ENVIRONMENT',
-                'secret' => 'b17b0ec30dbb6e1726a17972afad008be6a3e4a5',
-                'name' => 'TEST_ENVIRONMENT'
+                'id' => 'appid01',
+                'secret' => 'secret',
+                'name' => 'Minha App Mobile'
             )
         );
 

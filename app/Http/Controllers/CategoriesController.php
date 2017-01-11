@@ -4,6 +4,7 @@ namespace CodeDelivery\Http\Controllers;
 
 use CodeDelivery\Http\Requests\AdminCategoryRequest;
 use CodeDelivery\Repositories\CategoryRepository;
+use DateTimeInterface;
 use Illuminate\Http\Request;
 
 use CodeDelivery\Http\Requests;
@@ -58,8 +59,11 @@ class CategoriesController extends Controller
 
         $this->repository->update($data,$id);
 
+        DateTimeInterface->date_format();
+
         return redirect()->route('admin.categories.index');
 
 
     }
+
 }
