@@ -82,12 +82,17 @@ Route::group(['middleware' => 'cors'],function (){
 
     Route::group(['prefix'=>'api', 'middleware' =>'oauth', 'as'=>'api.'], function() {
 
+        Route::resource('authenticated','Api\AuthenticatedController', ['except' => ['create', 'post', 'edit', 'destroy']]);
+
         Route::resource('teste','Api\Client\ClientCheckoutController', ['except' => ['create', 'edit', 'destroy']]);
 
         Route::group(['prefix'=>'client', 'middleware' =>'oauth.checkrole:client', 'as'=>'client.'], function() {
 
-            Route::resource('order','Api\Client\ClientCheckoutController', ['except' => ['create', 'edit', 'destroy']]);
-
+            Route::resource('order',
+                'Api\Client\ClientCheckoutController', [
+                    'except' => ['create', 'edit', 'destroy']
+                ]);
+            Route::get('products','Api\Client\ClientProductController@index');
         });
 
         Route::group(['prefix'=>'deliveryman', 'middleware' =>'oauth.checkrole:deliveryman', 'as'=>'deliveryman.'], function() {
