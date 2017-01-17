@@ -59,7 +59,7 @@ class CategoriesController extends Controller
 
         $this->repository->update($data,$id);
 
-        DateTimeInterface->date_format();
+        DateTimeInterface::format();
 
         return redirect()->route('admin.categories.index');
 
