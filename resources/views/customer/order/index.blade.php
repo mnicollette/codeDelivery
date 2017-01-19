@@ -16,6 +16,7 @@
                 <td>Id</td>
                 <td>Total</td>
                 <td>Status</td>
+                <td>Data</td>
             </tr>
             </thead>
             <tbody>
@@ -24,6 +25,7 @@
                 <td>{{$order->id}}</td>
                 <td>{{$order->total}}</td>
                 <td>{{$order->status}}</td>
+                <td>{{$order->created_at}}</td>
             </tr>
             @endforeach
             </tbody>

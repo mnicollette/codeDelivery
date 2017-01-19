@@ -16,7 +16,7 @@ use CodeDelivery\Validators\UserValidator;
 class UserRepositoryEloquent extends BaseRepository implements UserRepository
 {
 
-    protected $skipPresenter = false;
+    protected $skipPresenter = true;
 
     /**
      * Specify Model class name

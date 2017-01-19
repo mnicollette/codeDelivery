@@ -4,7 +4,7 @@
     <div class="container">
         <h2>Pedidos</h2>
         <br>
-        <a href="{{  route('admin.orders.create') }}" class="btn btn-primary">Novo Pedido</a>
+        <!--<a href="{{  route('admin.orders.create') }}" class="btn btn-primary">Novo Pedido</a>-->
         <br>
     <table class="table table-bordered">
         <thead>
